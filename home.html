@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sai Vishwanth - Java Developer Portfolio</title>
+    
+    <!-- Professional Font (Poppins from Google Fonts) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icon Library (Font Awesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* 1. CSS Global Styles & Variables */
+        :root {
+            --primary-bg: #1f242d;
+            --secondary-bg: #323946;
+            --text-color: #f0f0f0;
+            --accent-color: #0ef;
+            --sub-heading-color: #98f5b3;
+            --font-family: 'Poppins', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; text-decoration: none; list-style: none; border: none; outline: none; }
+        html { scroll-behavior: smooth; font-size: 62.5%; overflow-x: hidden; }
+        body { background: var(--primary-bg); color: var(--text-color); font-family: var(--font-family); }
+        
+        section {
+            padding: 12rem 8% 10rem;
+            min-height: 100vh; /* Ensures sections take up reasonable space */
+        }
+        
+        .heading { text-align: center; font-size: 4.5rem; font-weight: 700; margin-bottom: 5rem; }
+        .heading span { color: var(--accent-color); }
+
+        /* PRELOADER */
+        .preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary-bg); z-index: 101; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease; }
+        .preloader.fade-out { opacity: 0; pointer-events: none; }
+        .spinner { width: 50px; height: 50px; border: 5px solid var(--secondary-bg); border-top: 5px solid var(--accent-color); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* CUSTOM SCROLLBAR */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--primary-bg); }
+        ::-webkit-scrollbar-thumb { background: var(--accent-color); border-radius: 10px; }
+
+        /* 2. Header & Navbar */
+        .header { position: fixed; top: 0; left: 0; width: 100%; padding: 2rem 8%; background: transparent; display: flex; justify-content: space-between; align-items: center; z-index: 100; transition: background-color .3s ease, padding .3s ease; }
+        .header.sticky { background: rgba(31, 36, 45, 0.95); backdrop-filter: blur(8px); box-shadow: 0 .1rem 1rem rgba(0,0,0,.1); padding: 1.5rem 8%;}
+        .logo { font-size: 2.5rem; font-weight: 600; color: var(--text-color); }
+        .navbar a { font-size: 1.7rem; color: var(--text-color); margin-left: 3.5rem; transition: color 0.3s ease; font-weight: 500; }
+        .navbar a:hover, .navbar a.active { color: var(--accent-color); }
+        #menu-icon { font-size: 3.6rem; color: var(--text-color); display: none; cursor: pointer; }
+
+        /* 3. Hero (Home) Section */
+        .hero { display: flex; align-items: center; justify-content: center; gap: 8rem; }
+        .hero-image img { width: 32vw; max-width: 380px; min-width: 250px; border-radius: 50%; border: .5rem solid var(--accent-color); box-shadow: 0 0 5rem var(--accent-color); object-fit: cover; animation: floatImage 4s ease-in-out infinite; }
+        @keyframes floatImage { 0% { transform: translateY(0); } 50% { transform: translateY(-2.4rem); } 100% { transform: translateY(0); } }
+        .hero-content { max-width: 60rem; }
+        .hero-content h3 { font-size: 3.2rem; font-weight: 700; color: var(--sub-heading-color); }
+        .hero-content h3:nth-of-type(1) { color: var(--text-color); font-weight: 500;}
+        .hero-content h1 { font-size: 5.6rem; font-weight: 700; line-height: 1.2; }
+        .hero-content p { font-size: 1.6rem; line-height: 1.7; margin: 2rem 0 4rem; color: #ccc; }
+        .social-icons a { display: inline-flex; justify-content: center; align-items: center; width: 4rem; height: 4rem; background: transparent; border: .2rem solid var(--accent-color); border-radius: 50%; font-size: 2rem; color: var(--accent-color); margin: 0 1.5rem 3rem 0; transition: all 0.3s ease; }
+        .social-icons a:hover { background-color: var(--accent-color); color: var(--secondary-bg); box-shadow: 0 0 2rem var(--accent-color); }
+        .btn { display: inline-block; padding: 1.2rem 2.8rem; background: var(--accent-color); border-radius: 4rem; box-shadow: 0 0 1rem var(--accent-color); font-size: 1.6rem; color: var(--secondary-bg); font-weight: 600; letter-spacing: .1rem; cursor: pointer; transition: all 0.3s ease; }
+        .btn:hover { box-shadow: 0 0 2.5rem var(--accent-color); transform: scale(1.02); }
+
+        /* 4. About Section */
+        .about { display: flex; align-items: center; justify-content: center; gap: 8rem; background: var(--secondary-bg); }
+        .about-image img { width: 32vw; max-width: 380px; min-width: 250px; border-radius: 50%; object-fit: cover; }
+        .about-content h3 { font-size: 2.6rem; color: var(--sub-heading-color); }
+        .about-content p { font-size: 1.6rem; color: #ccc; line-height: 1.8; margin-bottom: 1rem; }
+        
+        /* 5. Services Section */
+        .services-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2.5rem; }
+        .service-box { background: var(--secondary-bg); padding: 3rem; border-radius: 2rem; text-align: center; border-bottom: .5rem solid transparent; transition: all 0.4s ease; display: flex; flex-direction: column; }
+        .service-box:hover { border-bottom-color: var(--accent-color); transform: translateY(-1rem) scale(1.02); }
+        .service-box i { font-size: 7rem; color: var(--accent-color); }
+        .service-box h3 { font-size: 2.6rem; margin-top: 1rem; }
+        .service-box p { font-size: 1.6rem; margin: 1.5rem 0 3rem; color: #ccc; flex-grow: 1; }
+
+        /* 6. Projects Section */
+        .projects { background: var(--secondary-bg); }
+        .projects-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2.5rem; }
+        .project-box { display: flex; flex-direction: column; background: var(--primary-bg); border-radius: 1.5rem; overflow: hidden; box-shadow: 0 .5rem 1rem rgba(0,0,0,.2); transition: transform .3s ease, box-shadow .3s ease; }
+        .project-box:hover { transform: translateY(-1rem); box-shadow: 0 1rem 2rem rgba(0,0,0,.3); }
+        .project-img { height: 20rem; overflow: hidden; }
+        .project-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+        .project-box:hover .project-img img { transform: scale(1.1); }
+        .project-content { padding: 2.5rem; display: flex; flex-direction: column; flex-grow: 1; }
+        .project-content h4 { font-size: 2.2rem; font-weight: 600; }
+        .project-content p { font-size: 1.5rem; color: #ccc; margin: 1rem 0 2rem; flex-grow: 1; }
+        .project-content .btn { margin-top: auto; padding: 1rem 2rem; font-size: 1.4rem; align-self: flex-start; }
+
+        /* 7. Contact Section */
+        .contact-info { display: flex; justify-content: center; gap: 4rem; flex-wrap: wrap; margin-bottom: 6rem; text-align: center; }
+        .info-box { flex: 1; min-width: 250px; } /* Allows info boxes to wrap nicely */
+        .info-box i { font-size: 3rem; color: var(--accent-color); margin-bottom: 1rem; }
+        .info-box a { font-size: 1.6rem; color: var(--text-color); transition: color 0.3s ease; word-break: break-all; }
+        .info-box a:hover { color: var(--accent-color); }
+        .contact form { max-width: 70rem; margin: 1rem auto; text-align: center; }
+        .contact form .input-box { display: flex; justify-content: space-between; flex-wrap: wrap; }
+        .contact form .input-box input, .contact form textarea { width: 100%; padding: 1.5rem; font-size: 1.6rem; color: var(--text-color); background: var(--secondary-bg); border-radius: .8rem; margin: .7rem 0; font-family: inherit; }
+        .contact form .input-box input { width: 49%; }
+        .contact form .btn { margin-top: 2rem; }
+
+        /* 8. Footer */
+        .footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; padding: 3rem 8%; background: var(--secondary-bg); min-height: auto; }
+        .footer-text p { font-size: 1.6rem; }
+        .footer-icon-top a { display: inline-flex; justify-content: center; align-items: center; padding: .8rem; background: var(--accent-color); border-radius: .8rem; transition: all .3s ease; }
+        .footer-icon-top a:hover { box-shadow: 0 0 1rem var(--accent-color); }
+        .footer-icon-top a i { font-size: 2.4rem; color: var(--secondary-bg); }
+
+        /* --- RESPONSIVE BREAKPOINTS --- */
+        @media (max-width: 1200px) { 
+            html { font-size: 55%; } 
+            section { padding: 10rem 8% 8rem; }
+        }
+        
+        @media (max-width: 991px) { 
+            .header { padding: 2rem 4%; } 
+            section { padding: 10rem 4% 8rem; } 
+            .footer { padding: 3rem 4%; }
+            .hero { gap: 4rem; }
+            .about { gap: 4rem; }
+        }
+
+        @media (max-width: 768px) { 
+            #menu-icon { display: block; } 
+            
+            .navbar { 
+                position: absolute; 
+                top: 100%; 
+                left: 0; 
+                width: 100%; 
+                padding: 1rem 4%; 
+                background: var(--primary-bg); 
+                border-top: .1rem solid rgba(0,0,0,.2); 
+                box-shadow: 0 .5rem 1rem rgba(0,0,0,.2); 
+                display: none; 
+            } 
+            
+            .navbar.active { display: block; } 
+            .navbar a { display: block; font-size: 2rem; margin: 3rem 0; text-align: center; } 
+            
+            .hero { flex-direction: column-reverse; gap: 4rem; text-align: center; margin-top: 5rem; } 
+            .hero-content .social-icons { justify-content: center; } 
+            
+            .about { flex-direction: column; text-align: center; } 
+
+            .services-container { grid-template-columns: 1fr; }
+            
+            .projects-container { grid-template-columns: 1fr; }
+
+            .contact form .input-box input { width: 100%; } 
+
+            .footer { flex-direction: column-reverse; gap: 2rem; text-align: center; }
+        }
+
+        @media (max-width: 450px) { 
+            html { font-size: 50%; } 
+            .hero { margin-top: 8rem; }
+            .hero-image img { width: 65vw; }
+            .about-image img { width: 65vw; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="preloader"> <div class="spinner"></div> </div>
+    
+    <header class="header">
+        <a href="#home" class="logo">Mr_Sai Portfolio.</a>
+        <i class="fa-solid fa-bars" id="menu-icon"></i>
+        <nav class="navbar">
+            <a href="#home" class="active">Home</a> <a href="#about">About</a> <a href="#services">Services</a> <a href="#projects">Projects</a> <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <h3>Hello, It's Me</h3>
+                <h1>B.Sai Vishwanth</h1>
+                <h3>And I'm a <span class="multiple-text"></span></h3>
+                <p>An enthusiastic developer with a strong foundation in Java, Python, and web technologies, dedicated to building applications that solve real-world problems.</p>
+                <div class="social-icons">
+                    <a href="mailto:bibinagarsaivishwanth@gmail.com" target="_blank"><i class="fa-solid fa-envelope"></i></a>
+                    <a href="https://www.linkedin.com/in/bibinagar-saivishwanth-624781320" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="https://www.instagram.com/mr_vinnu_7819" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+                <a href="https://drive.google.com/uc?export=download&id=1doyq1xVYREibxKNRUktlCzyJiCdEJShD" id="download-btn" class="btn">Download Resume</a>
+            </div>
+            <div class="hero-image"> <img src="mypic.jpeg" alt="A photo of B.Sai Vishwanth"> </div>
+        </section>
+
+        <section class="about" id="about">
+            <div class="about-image"> <img src="mypic.jpeg" alt="A photo of B.Sai Vishwanth"> </div>
+            <div class="about-content">
+                <h2 class="heading">About <span>Me</span></h2>
+                <h3>Java Developer</h3>
+                <p>I am a passionate and dedicated Bachelor of Computer Applications (BCA) student with a strong focus on becoming a proficient Full-Stack Java Developer. My journey in tech is driven by a curiosity for building robust, scalable applications and a commitment to continuous learning.</p>
+                <p>With hands-on experience in Java, Python, and core web technologies, I am actively expanding my skillset with modern frameworks like Spring Boot to tackle complex, real-world challenges.</p>
+            </div>
+        </section>
+
+        <section class="services" id="services">
+             <h2 class="heading">My <span>Services</span></h2>
+            <div class="services-container">
+                <div class="service-box"> <i class="fa-solid fa-code"></i> <h3>Frontend Development</h3> <p>Crafting clean, responsive, and user-centric interfaces with HTML, CSS, and JavaScript to ensure an optimal experience on any device.</p> </div>
+                <div class="service-box"> <i class="fa-solid fa-server"></i> <h3>Backend Development</h3> <p>Building robust and secure server-side logic using Java and integrating with databases like MySQL for efficient data management.</p> </div>
+                <div class="service-box"> <i class="fa-solid fa-database"></i> <h3>Database Management</h3> <p>Designing, implementing, and managing relational databases with MySQL, a skill essential for the backend of any modern application.</p> </div>
+            </div>
+        </section>
+
+        <section class="projects" id="projects">
+            <h2 class="heading">Latest <span>Projects</span></h2>
+            <div class="projects-container">
+                <div class="project-box">
+                    <div class="project-img"> <img src="th.jpeg" alt="Interactive Form Project"> </div>
+                    <div class="project-content">
+                        <h4>Interactive Web Form</h4>
+                        <p>A dynamic user registration form with client-side validation using JavaScript, hosted on GitHub Pages.</p>
+                        <a href="https://sai934-v.github.io/mr_aura_project" target="_blank" rel="noopener noreferrer" class="btn">View Project</a>
+                    </div>
+                </div>
+                <div class="project-box">
+                     <div class="project-img"> <img src="th (1).jpeg" alt="Full Stack Project Image"> </div>
+                     <div class="project-content">
+                        <h4>Full Stack Application</h4>
+                        <p>NOTE: This project uses JSP files and requires a local server to run. A complete web app featuring a Java backend, MySQL, and a user-friendly frontend.</p>
+                        <a href="https://github.com/Sai934-v/Example/blob/master/src/main/webapp/home2.html" target="_blank" rel="noopener noreferrer" class="btn">View on GitHub</a>
+                    </div>
+                </div>
+                <div class="project-box">
+                    <div class="project-img"> <img src="mypic.jpeg" alt="Portfolio Project Image"> </div>
+                    <div class="project-content">
+                        <h4>Personal Portfolio</h4>
+                        <p>This very website, built from scratch to showcase my skills in modern front-end development, animations, and responsive design.</p>
+                        <a href="#home" class="btn">Back to Top</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact" id="contact">
+            <h2 class="heading">Contact <span>Me!</span></h2>
+            <div class="contact-info">
+                <div class="info-box"> <i class="fa-solid fa-envelope"></i> <a href="mailto:bibinagarsaivishwanth@gmail.com">bibinagarsaivishwanth@gmail.com</a> </div>
+                <div class="info-box"> <i class="fa-brands fa-linkedin"></i> <a href="https://www.linkedin.com/in/bibinagar-saivishwanth-624781320" target="_blank" rel="noopener noreferrer">Bibinagar saivishwanth</a> </div>
+                <div class="info-box"> <i class="fa-brands fa-instagram"></i> <a href="https://www.instagram.com/mr_vinnu_7819" target="_blank" rel="noopener noreferrer">@mr_vinnu_7819</a> </div>
+            </div>
+            
+            <!-- === FORM FIX STARTS HERE === -->
+            <!-- 1. I replaced action="#" with your future Formspree URL. -->
+            <!-- 2. I added method="POST". -->
+            <!-- 3. I added a 'name' attribute to every input and textarea. This is ESSENTIAL. -->
+            <form action="https://formspree.io/f/YOUR_UNIQUE_FORM_ID" method="POST">
+                <div class="input-box"> 
+                    <input type="text" name="name" placeholder="Full Name" required> 
+                    <input type="email" name="email" placeholder="Email Address" required> 
+                </div>
+                <div class="input-box"> 
+                    <input type="tel" name="mobile" placeholder="Mobile Number"> 
+                    <input type="text" name="subject" placeholder="Email Subject" required> 
+                </div>
+                <textarea name="message" cols="30" rows="10" placeholder="Your Message" required></textarea>
+                <input type="submit" value="Send Message" class="btn">
+            </form>
+            <!-- === FORM FIX ENDS HERE === -->
+        </section>
+    </main>
+    
+    <footer class="footer">
+        <div class="footer-text"> <p>Copyright © 2024 by B.Sai Vishwanth | All Rights Reserved.</p> </div>
+        <div class="footer-icon-top"> <a href="#home"><i class="fa-solid fa-angle-up"></i></a> </div>
+    </footer>
+
+    <!-- JS Libraries -->
+    <script src="https://unpkg.com/scrollreveal"></script> 
+    <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+
+    <!-- Main JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const preloader = document.querySelector('.preloader');
+            window.addEventListener('load', () => preloader.classList.add('fade-out'));
+
+            const header = document.querySelector('.header');
+            const menuIcon = document.querySelector('#menu-icon');
+            const navbar = document.querySelector('.navbar');
+            const navLinks = document.querySelectorAll('.navbar a');
+            const sections = document.querySelectorAll('section[id]');
+            
+            const toggleMenu = () => {
+                menuIcon.classList.toggle('fa-xmark');
+                navbar.classList.toggle('active');
+            };
+
+            menuIcon.onclick = toggleMenu;
+            navLinks.forEach(link => link.addEventListener('click', () => {
+                if(navbar.classList.contains('active')) {
+                    toggleMenu();
+                }
+            }));
+
+            window.onscroll = () => {
+                header.classList.toggle('sticky', window.scrollY > 100);
+                
+                let currentSectionId = 'home';
+                sections.forEach(sec => {
+                    const top = window.scrollY;
+                    const offset = sec.offsetTop - 150;
+                    const height = sec.offsetHeight;
+                    if (top >= offset && top < offset + height) {
+                        currentSectionId = sec.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    const activeLink = document.querySelector(`.navbar a[href*=${currentSectionId}]`);
+                    if (activeLink) {
+                        activeLink.classList.add('active');
+                    }
+                });
+                
+                // Close mobile menu on scroll
+                if(navbar.classList.contains('active')) {
+                    menuIcon.classList.remove('fa-xmark');
+                    navbar.classList.remove('active');
+                }
+            };
+
+            const typed = new Typed('.multiple-text', {
+                strings: ['Java Developer', 'Frontend Enthusiast', 'Problem Solver'],
+                typeSpeed: 70, backSpeed: 70, backDelay: 1000, loop: true
+            });
+
+            ScrollReveal({ reset: true, distance: '80px', duration: 2000, delay: 200 });
+            ScrollReveal().reveal('.hero-content, .heading', { origin: 'top' });
+            ScrollReveal().reveal('.hero-image, .services-container, .projects-container, .contact-info, .contact form', { origin: 'bottom' });
+            ScrollReveal().reveal('.about-image', { origin: 'left' });
+            ScrollReveal().reveal('.about-content', { origin: 'right' });
+            
+            const downloadBtn = document.getElementById('download-btn');
+            if (downloadBtn) {
+                downloadBtn.addEventListener('click', function(event) {
+                    event.preventDefault();
+
+                    this.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Downloading...';
+                    this.style.pointerEvents = 'none';
+
+                    // Use the original href for the download
+                    const resumeUrl = this.href;
+
+                    // Fetching the file as a blob to give it a nice name
+                    fetch(resumeUrl)
+                        .then(response => response.blob())
+                        .then(blob => {
+                            const link = document.createElement('a');
+                            link.href = URL.createObjectURL(blob);
+                            link.setAttribute('download', 'Sai-Vishwanth-Resume.pdf');
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                            URL.revokeObjectURL(link.href);
+
+                             setTimeout(() => {
+                                this.innerHTML = 'Downloaded! ✅';
+                                setTimeout(() => {
+                                    this.innerHTML = 'Download Resume';
+                                    this.style.pointerEvents = 'auto';
+                                }, 2000); // Revert back to original text after 2 seconds
+                            }, 1000);
+                        }).catch(() => {
+                            // Fallback if fetch fails (e.g., CORS issue)
+                            this.innerHTML = 'Download Resume';
+                            this.style.pointerEvents = 'auto';
+                            window.open(resumeUrl, '_blank');
+                        });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
