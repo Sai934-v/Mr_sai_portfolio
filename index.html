@@ -193,7 +193,10 @@
                     <a href="https://www.linkedin.com/in/bibinagar-saivishwanth-624781320" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a>
                     <a href="https://www.instagram.com/mr_vinnu_7819" target="_blank"><i class="fa-brands fa-instagram"></i></a>
                 </div>
-                <a href="https://drive.google.com/file/d/1emUwumib5HApXr6HB4BPO2yPRD7ZkZcm/view?usp=drive_link" id="download-btn" class="btn">Download Resume</a>
+                <!-- ================== HTML CHANGE HERE ================== -->
+                <!-- The href now points to the direct download link -->
+                <a href="https://drive.google.com/uc?export=download&id=1emUwumib5HApXr6HB4BPO2yPRD7ZkZcm" id="download-btn" class="btn">Download Resume</a>
+                <!-- ====================================================== -->
             </div>
             <div class="hero-image"> <img src="mypic.jpeg" alt="A photo of B.Sai Vishwanth"> </div>
         </section>
@@ -255,10 +258,6 @@
                 <div class="info-box"> <i class="fa-brands fa-instagram"></i> <a href="https://www.instagram.com/mr_vinnu_7819" target="_blank" rel="noopener noreferrer">@mr_vinnu_7819</a> </div>
             </div>
             
-            <!-- === FORM FIX STARTS HERE === -->
-            <!-- 1. I replaced action="#" with your future Formspree URL. -->
-            <!-- 2. I added method="POST". -->
-            <!-- 3. I added a 'name' attribute to every input and textarea. This is ESSENTIAL. -->
             <form action="https://formspree.io/f/YOUR_UNIQUE_FORM_ID" method="POST">
                 <div class="input-box"> 
                     <input type="text" name="name" placeholder="Full Name" required> 
@@ -271,7 +270,6 @@
                 <textarea name="message" cols="30" rows="10" placeholder="Your Message" required></textarea>
                 <input type="submit" value="Send Message" class="btn">
             </form>
-            <!-- === FORM FIX ENDS HERE === -->
         </section>
     </main>
     
@@ -347,44 +345,41 @@
             ScrollReveal().reveal('.about-image', { origin: 'left' });
             ScrollReveal().reveal('.about-content', { origin: 'right' });
             
+            // ================== JAVASCRIPT CHANGE HERE ==================
+            // This entire block is replaced with a simpler, correct version.
             const downloadBtn = document.getElementById('download-btn');
             if (downloadBtn) {
                 downloadBtn.addEventListener('click', function(event) {
+                    // 1. Prevent the browser from just following the link
                     event.preventDefault();
 
+                    // 2. Show a nice "Downloading..." message to the user
                     this.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Downloading...';
                     this.style.pointerEvents = 'none';
 
-                    // Use the original href for the download
-                    const resumeUrl = this.href;
+                    // 3. Create a temporary, hidden link element to trigger the download
+                    const link = document.createElement('a');
+                    link.href = this.href; // The href is now the correct direct download link
+                    
+                    // 4. Set the desired filename for the downloaded file
+                    link.setAttribute('download', 'Sai-Vishwanth-Resume.pdf');
+                    
+                    // 5. Add the link to the page, click it, then remove it
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
 
-                    // Fetching the file as a blob to give it a nice name
-                    fetch(resumeUrl)
-                        .then(response => response.blob())
-                        .then(blob => {
-                            const link = document.createElement('a');
-                            link.href = URL.createObjectURL(blob);
-                            link.setAttribute('download', 'Sai-Vishwanth-Resume.pdf');
-                            document.body.appendChild(link);
-                            link.click();
-                            document.body.removeChild(link);
-                            URL.revokeObjectURL(link.href);
-
-                             setTimeout(() => {
-                                this.innerHTML = 'Downloaded! ✅';
-                                setTimeout(() => {
-                                    this.innerHTML = 'Download Resume';
-                                    this.style.pointerEvents = 'auto';
-                                }, 2000); // Revert back to original text after 2 seconds
-                            }, 1000);
-                        }).catch(() => {
-                            // Fallback if fetch fails (e.g., CORS issue)
+                    // 6. Update the button text to show success and then reset it
+                    setTimeout(() => {
+                        this.innerHTML = 'Downloaded! ✅';
+                        setTimeout(() => {
                             this.innerHTML = 'Download Resume';
                             this.style.pointerEvents = 'auto';
-                            window.open(resumeUrl, '_blank');
-                        });
+                        }, 2000); // Revert back to original text after 2 seconds
+                    }, 1500); // Wait 1.5s before showing "Downloaded"
                 });
             }
+            // ==========================================================
         });
     </script>
 </body>
